@@ -1,47 +1,73 @@
+import { Ball, Paddle } from "./models/index.js";
+
 var log = console.log.bind(console);
-var canvas = document.querySelector("#id-canvas");
-var context = canvas.getContext("2d");
 
-var x = 100;
-var y = 200;
-var speed = 5;
+class SmallGame {
+  constructor(context) {
+    this.context = context;
+    this.actions = {};
+    this.keydowns = {};
+  }
 
-var img = new Image();
-img.src = "paddle.png";
-img.onload = function() {
-  context.drawImage(img, x, y);
+  drawImage(item) {
+    this.context.drawImage(item.image, item.x, item.y);
+  }
+
+  registerAction(key, callback) {
+    this.actions[key] = callback;
+  }
+}
+
+const bindEvent = (game, paddle, ball, canvas) => {
+  // events
+  window.addEventListener("keydown", function(event) {
+    game.keydowns[event.key] = true;
+  });
+
+  window.addEventListener("keyup", function(event) {
+    game.keydowns[event.key] = false;
+  });
+
+  game.registerAction("a", function() {
+    paddle.moveLeft();
+  });
+
+  game.registerAction("d", function() {
+    paddle.moveRight();
+  });
+
+  game.registerAction("f", function() {
+    ball.fire();
+  });
+
+  setInterval(function() {
+    var actions = Object.keys(game.actions);
+    for (var i = 0; i < actions.length; i++) {
+      var key = actions[i];
+      // log('g.keydowns[key]', g.keydowns[key])
+      if (game.keydowns[key]) {
+        game.actions[key]();
+      }
+    }
+
+    // update
+    ball.move();
+    // clear
+    game.context.clearRect(0, 0, canvas.width, canvas.height);
+    // draw
+    game.drawImage(paddle);
+    game.drawImage(ball);
+  }, 1000 / 30);
 };
 
-var leftDown = false;
-var rightDown = false;
+var __main = function() {
+  var canvas = document.querySelector("#id-canvas");
+  var context = canvas.getContext("2d");
+  var game = new SmallGame(context);
+  var paddle = new Paddle("paddle.png", 100, 200, 5);
+  var ball = new Ball("ball.png", 100, 200, 10, 10);
 
-window.addEventListener("keydown", function(event) {
-  var k = event.key;
-  if (k == "a") {
-    leftDown = true;
-  } else if (k == "d") {
-    rightDown = true;
-  }
-});
+  bindEvent(game, paddle, ball, canvas);
+};
 
-window.addEventListener("keyup", function(event) {
-  var k = event.key;
-  if (k == "a") {
-    leftDown = false;
-  } else if (k == "d") {
-    rightDown = false;
-  }
-});
-
-setInterval(function() {
-  // update x
-  if (leftDown) {
-    x -= speed;
-  } else if (rightDown) {
-    x += speed;
-  }
-
-  // draw
-  context.clearRect(0, 0, canvas.clientWidth, canvas.height);
-  context.drawImage(img, x, y);
-}, 1000 / 30);
+__main();
