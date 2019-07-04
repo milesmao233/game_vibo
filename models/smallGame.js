@@ -1,8 +1,9 @@
 class SmallGame {
-  constructor(context) {
+  constructor(context, blocks) {
     this.context = context;
     this.actions = {};
     this.keydowns = {};
+    this.blocks = blocks;
   }
 
   drawImage(item) {
@@ -17,6 +18,10 @@ class SmallGame {
     for (let item of items) {
       this.drawImage(item);
     }
+  }
+
+  changeLevel(blocks) {
+    this.blocks = [...blocks];
   }
 }
 

@@ -1,10 +1,10 @@
 import Item from "./main.js";
 
 class Ball extends Item {
-  constructor(path, x, y, speed, speedX, speedY) {
-    super(path, x, y, speed);
-    this.speedX = speedX;
-    this.speedY = speedY;
+  constructor(path, x, y, moveSpeed) {
+    super(path, x, y, moveSpeed);
+    this.speedX = 10;
+    this.speedY = 10;
     this.fired = false;
     this.paused = false;
   }

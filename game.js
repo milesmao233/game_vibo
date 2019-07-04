@@ -1,4 +1,5 @@
 import { Ball, Paddle, Block, SmallGame } from "./models/index.js";
+import levels from "./models/level.js";
 import { log } from "./utils.js";
 
 const bindGameInputEvent = (game, paddle, ball) => {
@@ -7,11 +8,24 @@ const bindGameInputEvent = (game, paddle, ball) => {
       ball.pause();
       return;
     }
+    if ("1234567".includes(event.key)) {
+      let blocks = loadLevel(Number(event.key));
+
+      game.changeLevel(blocks);
+      return;
+    }
     game.keydowns[event.key] = true;
   });
 
   window.addEventListener("keyup", function(event) {
     game.keydowns[event.key] = false;
+  });
+
+  const ballSpeedControl = document.querySelector("#id-input-ball-speed");
+  ballSpeedControl.addEventListener("input", function(event) {
+    const input = event.target.value;
+    ball.speedX = Number(input);
+    ball.speedY = Number(input);
   });
 
   game.registerAction("a", function() {
@@ -31,22 +45,43 @@ const bindGameInputEvent = (game, paddle, ball) => {
   });
 };
 
-const updateEvents = (ball, paddle, blocks) => {
-  if (ball.paused) {
-    return;
-  }
-  ball.move();
-  if (paddle.collide(ball)) ball.rebound();
+const runloop = (game, paddle, ball, canvas) => {
+  runGameActions(game, canvas);
 
-  blocks.forEach(block => {
-    if (block.collide(ball)) {
-      block.kill();
-      ball.rebound();
-    }
-  });
+  // update
+  updateEvents(game, ball, paddle);
+  // clear
+  game.context.clearRect(0, 0, canvas.width, canvas.height);
+  // draw
+  reDrawGame(game, paddle, ball);
 };
 
-const runloop = (game, paddle, ball, blocks, canvas) => {
+const bindEvent = (game, paddle, ball, canvas) => {
+  // bind events
+  bindGameInputEvent(game, paddle, ball);
+  // run
+  setInterval(function() {
+    runloop(game, paddle, ball, canvas);
+  }, 1000 / 30);
+};
+
+const __main = () => {
+  const canvas = document.querySelector("#id-canvas");
+  const context = canvas.getContext("2d");
+
+  const blocks = loadLevel(1);
+  const game = new SmallGame(context, blocks);
+  const paddle = new Paddle("paddle.png", 200, 550, 8);
+  const ball = new Ball("ball.png", 250, 520, 8);
+
+  bindEvent(game, paddle, ball, canvas);
+};
+
+__main();
+
+// ****************
+
+function runGameActions(game, canvas) {
   var actions = Object.keys(game.actions);
   for (var i = 0; i < actions.length; i++) {
     var key = actions[i];
@@ -55,46 +90,40 @@ const runloop = (game, paddle, ball, blocks, canvas) => {
       game.actions[key](canvas.width);
     }
   }
+}
 
-  // update
-  updateEvents(ball, paddle, blocks);
-  // clear
-  game.context.clearRect(0, 0, canvas.width, canvas.height);
-  // draw
+function updateEvents(game, ball, paddle) {
+  if (ball.paused) {
+    return;
+  }
+  ball.move();
+  if (paddle.collide(ball)) ball.rebound();
+
+  game.blocks.forEach(block => {
+    if (block.collide(ball)) {
+      block.kill();
+      ball.rebound();
+    }
+  });
+}
+
+function reDrawGame(game, ball, paddle) {
   game.draw(Array.from([paddle, ball]));
-  blocks.forEach(block => {
+  game.blocks.forEach(block => {
     if (block.alive) {
       game.draw(Array.from([block]));
     }
   });
-};
+}
 
-const bindEvent = (game, paddle, ball, blocks, canvas) => {
-  // events
-
-  bindGameInputEvent(game, paddle, ball);
-
-  setInterval(function() {
-    runloop(game, paddle, ball, blocks, canvas);
-  }, 1000 / 30);
-};
-
-var __main = function() {
-  var canvas = document.querySelector("#id-canvas");
-  var context = canvas.getContext("2d");
-  var game = new SmallGame(context);
-  var paddle = new Paddle("paddle.png", 200, 550, 8);
-  var ball = new Ball("ball.png", 250, 520, 8, 10, 10);
-
-  var blocks = [];
-  for (let i = 0; i < 10; i++) {
-    var x = i * 50;
-    var y = i * 50;
-    var b = new Block("block.png", x, y, 50, 20);
-    blocks.push(b);
-  }
-
-  bindEvent(game, paddle, ball, blocks, canvas);
-};
-
-__main();
+function loadLevel(n) {
+  n = n - 1;
+  var level = levels[n];
+  var blocks = level.map(block => {
+    var x = block[0];
+    var y = block[1];
+    var lives = block[2] || 1;
+    return new Block("block.png", x, y, lives, 50, 20);
+  });
+  return blocks;
+}

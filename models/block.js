@@ -2,15 +2,19 @@ import Item from "./main.js";
 import { log, rectIntersects } from "../utils.js";
 
 class Block extends Item {
-  constructor(path, x, y, w, h) {
+  constructor(path, x, y, lives, w, h) {
     super(path, x, y);
     this.w = w;
     this.h = h;
     this.alive = true;
+    this.lives = lives;
   }
 
   kill() {
-    this.alive = false;
+    this.lives--;
+    if (this.lives < 1) {
+      this.alive = false;
+    }
   }
 
   collide(ball) {

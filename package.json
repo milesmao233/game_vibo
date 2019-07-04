@@ -1,0 +1,20 @@
+{
+  "name": "vibo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milesmao233/game_vibo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milesmao233/game_vibo/issues"
+  },
+  "homepage": "https://github.com/milesmao233/game_vibo#readme"
+}
