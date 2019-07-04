@@ -10,23 +10,23 @@ var rectIntersects = function(a, b) {
   return false;
 };
 
-class Paddle extends Item {
-  constructor(path, x, y, speed) {
+class Block extends Item {
+  constructor(path, x, y, w, h) {
     super(path, x, y);
-    this.speed = speed;
+    this.w = w;
+    this.h = h;
+    this.alive = true;
   }
 
-  moveLeft() {
-    this.x -= this.speed;
-  }
-
-  moveRight() {
-    this.x += this.speed;
+  kill() {
+    this.alive = false;
   }
 
   collide(ball) {
-    return rectIntersects(this, ball) || rectIntersects(ball, this);
+    return (
+      this.alive && (rectIntersects(this, ball) || rectIntersects(ball, this))
+    );
   }
 }
 
-export default Paddle;
+export default Block;

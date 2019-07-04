@@ -12,6 +12,10 @@ class Ball extends Item {
     this.fired = true;
   }
 
+  rebound() {
+    this.speedY *= -1;
+  }
+
   move() {
     if (this.fired) {
       if (this.x < 0 || this.x > 400) {

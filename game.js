@@ -1,4 +1,4 @@
-import { Ball, Paddle } from "./models/index.js";
+import { Ball, Paddle, Block } from "./models/index.js";
 
 var log = console.log.bind(console);
 
@@ -16,10 +16,15 @@ class SmallGame {
   registerAction(key, callback) {
     this.actions[key] = callback;
   }
+
+  draw(items) {
+    for (let item of items) {
+      this.drawImage(item);
+    }
+  }
 }
 
-const bindEvent = (game, paddle, ball, canvas) => {
-  // events
+const bindGameInputEvent = (game, paddle, ball) => {
   window.addEventListener("keydown", function(event) {
     game.keydowns[event.key] = true;
   });
@@ -39,6 +44,22 @@ const bindEvent = (game, paddle, ball, canvas) => {
   game.registerAction("f", function() {
     ball.fire();
   });
+};
+
+const updateEvents = (ball, paddle, block) => {
+  ball.move();
+  if (paddle.collide(ball)) ball.rebound();
+
+  if (block.collide(ball)) {
+    block.kill();
+    ball.rebound();
+  }
+};
+
+const bindEvent = (game, paddle, ball, block, canvas) => {
+  // events
+
+  bindGameInputEvent(game, paddle, ball);
 
   setInterval(function() {
     var actions = Object.keys(game.actions);
@@ -51,12 +72,12 @@ const bindEvent = (game, paddle, ball, canvas) => {
     }
 
     // update
-    ball.move();
+    updateEvents(ball, paddle, block);
     // clear
     game.context.clearRect(0, 0, canvas.width, canvas.height);
     // draw
-    game.drawImage(paddle);
-    game.drawImage(ball);
+    game.draw(Array.from([paddle, ball]));
+    if (block.alive) game.draw(Array.from([block]));
   }, 1000 / 30);
 };
 
@@ -66,8 +87,9 @@ var __main = function() {
   var game = new SmallGame(context);
   var paddle = new Paddle("paddle.png", 100, 200, 5);
   var ball = new Ball("ball.png", 100, 200, 10, 10);
+  var block = new Block("block.png", 100, 100, 50, 20);
 
-  bindEvent(game, paddle, ball, canvas);
+  bindEvent(game, paddle, ball, block, canvas);
 };
 
 __main();
