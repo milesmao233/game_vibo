@@ -1,8 +1,8 @@
 import Item from "./main.js";
 
 class Ball extends Item {
-  constructor(path, x, y, speedX, speedY) {
-    super(path, x, y);
+  constructor(path, x, y, speed, speedX, speedY) {
+    super(path, x, y, speed);
     this.speedX = speedX;
     this.speedY = speedY;
     this.fired = false;
@@ -18,10 +18,10 @@ class Ball extends Item {
 
   move() {
     if (this.fired) {
-      if (this.x < 0 || this.x > 400) {
+      if (this.x < 0 || this.x > 600) {
         this.speedX = -this.speedX;
       }
-      if (this.y < 0 || this.y > 300) {
+      if (this.y < 0 || this.y > 600) {
         this.speedY = -this.speedY;
       }
       this.x += this.speedX;

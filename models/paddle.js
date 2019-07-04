@@ -16,14 +16,6 @@ class Paddle extends Item {
     this.speed = speed;
   }
 
-  moveLeft() {
-    this.x -= this.speed;
-  }
-
-  moveRight() {
-    this.x += this.speed;
-  }
-
   collide(ball) {
     return rectIntersects(this, ball) || rectIntersects(ball, this);
   }

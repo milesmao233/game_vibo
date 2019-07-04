@@ -35,10 +35,14 @@ const bindGameInputEvent = (game, paddle, ball) => {
 
   game.registerAction("a", function() {
     paddle.moveLeft();
+    if (!ball.fired) ball.moveLeft();
+    // TODO
   });
 
-  game.registerAction("d", function() {
-    paddle.moveRight();
+  game.registerAction("d", function(screenWidth) {
+    paddle.moveRight(screenWidth);
+    if (!ball.fired) ball.moveRight(screenWidth);
+    // TODO
   });
 
   game.registerAction("f", function() {
@@ -46,17 +50,19 @@ const bindGameInputEvent = (game, paddle, ball) => {
   });
 };
 
-const updateEvents = (ball, paddle, block) => {
+const updateEvents = (ball, paddle, blocks) => {
   ball.move();
   if (paddle.collide(ball)) ball.rebound();
 
-  if (block.collide(ball)) {
-    block.kill();
-    ball.rebound();
-  }
+  blocks.forEach(block => {
+    if (block.collide(ball)) {
+      block.kill();
+      ball.rebound();
+    }
+  });
 };
 
-const bindEvent = (game, paddle, ball, block, canvas) => {
+const bindEvent = (game, paddle, ball, blocks, canvas) => {
   // events
 
   bindGameInputEvent(game, paddle, ball);
@@ -67,17 +73,21 @@ const bindEvent = (game, paddle, ball, block, canvas) => {
       var key = actions[i];
       // log('g.keydowns[key]', g.keydowns[key])
       if (game.keydowns[key]) {
-        game.actions[key]();
+        game.actions[key](canvas.width);
       }
     }
 
     // update
-    updateEvents(ball, paddle, block);
+    updateEvents(ball, paddle, blocks);
     // clear
     game.context.clearRect(0, 0, canvas.width, canvas.height);
     // draw
     game.draw(Array.from([paddle, ball]));
-    if (block.alive) game.draw(Array.from([block]));
+    blocks.forEach(block => {
+      if (block.alive) {
+        game.draw(Array.from([block]));
+      }
+    });
   }, 1000 / 30);
 };
 
@@ -85,11 +95,18 @@ var __main = function() {
   var canvas = document.querySelector("#id-canvas");
   var context = canvas.getContext("2d");
   var game = new SmallGame(context);
-  var paddle = new Paddle("paddle.png", 100, 200, 5);
-  var ball = new Ball("ball.png", 100, 200, 10, 10);
-  var block = new Block("block.png", 100, 100, 50, 20);
+  var paddle = new Paddle("paddle.png", 200, 550, 8);
+  var ball = new Ball("ball.png", 250, 520, 8, 10, 10);
 
-  bindEvent(game, paddle, ball, block, canvas);
+  var blocks = [];
+  for (let i = 0; i < 10; i++) {
+    var x = i * 50;
+    var y = i * 50;
+    var b = new Block("block.png", x, y, 50, 20);
+    blocks.push(b);
+  }
+
+  bindEvent(game, paddle, ball, blocks, canvas);
 };
 
 __main();
