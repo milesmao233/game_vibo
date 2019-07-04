@@ -6,10 +6,15 @@ class Ball extends Item {
     this.speedX = speedX;
     this.speedY = speedY;
     this.fired = false;
+    this.paused = false;
   }
 
   fire() {
     this.fired = true;
+  }
+
+  pause() {
+    this.paused = !this.paused;
   }
 
   rebound() {

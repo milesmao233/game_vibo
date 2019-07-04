@@ -6,13 +6,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>game 1</title>
     <style>
+      .container {
+        display: flex;
+        justify-content: space-around;
+      }
+
       canvas {
         border: 1px black solid;
+        flex-direction: column;
+      }
+
+      .description {
+        flex-direction: column;
+        padding: 10px;
+      }
+
+      li {
+        list-style-type: none;
       }
     </style>
   </head>
   <body>
-    <canvas id="id-canvas" width="600" height="600"></canvas>
+    <div class="container">
+      <canvas id="id-canvas" width="600" height="600"></canvas>
+      <div class="description">
+        <li>
+          <p>"f" 发射子弹开始游戏</p>
+        </li>
+        <li>
+          <p>"p" 暂停</p>
+        </li>
+      </div>
+    </div>
+
     <script src="game.js" type="module"></script>
   </body>
 </html>

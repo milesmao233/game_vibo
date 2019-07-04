@@ -1,31 +1,12 @@
-import { Ball, Paddle, Block } from "./models/index.js";
-
-var log = console.log.bind(console);
-
-class SmallGame {
-  constructor(context) {
-    this.context = context;
-    this.actions = {};
-    this.keydowns = {};
-  }
-
-  drawImage(item) {
-    this.context.drawImage(item.image, item.x, item.y);
-  }
-
-  registerAction(key, callback) {
-    this.actions[key] = callback;
-  }
-
-  draw(items) {
-    for (let item of items) {
-      this.drawImage(item);
-    }
-  }
-}
+import { Ball, Paddle, Block, SmallGame } from "./models/index.js";
+import { log } from "./utils.js";
 
 const bindGameInputEvent = (game, paddle, ball) => {
   window.addEventListener("keydown", function(event) {
+    if (event.key == "p") {
+      ball.pause();
+      return;
+    }
     game.keydowns[event.key] = true;
   });
 
@@ -51,6 +32,9 @@ const bindGameInputEvent = (game, paddle, ball) => {
 };
 
 const updateEvents = (ball, paddle, blocks) => {
+  if (ball.paused) {
+    return;
+  }
   ball.move();
   if (paddle.collide(ball)) ball.rebound();
 
@@ -62,32 +46,36 @@ const updateEvents = (ball, paddle, blocks) => {
   });
 };
 
+const runloop = (game, paddle, ball, blocks, canvas) => {
+  var actions = Object.keys(game.actions);
+  for (var i = 0; i < actions.length; i++) {
+    var key = actions[i];
+    // log('g.keydowns[key]', g.keydowns[key])
+    if (game.keydowns[key]) {
+      game.actions[key](canvas.width);
+    }
+  }
+
+  // update
+  updateEvents(ball, paddle, blocks);
+  // clear
+  game.context.clearRect(0, 0, canvas.width, canvas.height);
+  // draw
+  game.draw(Array.from([paddle, ball]));
+  blocks.forEach(block => {
+    if (block.alive) {
+      game.draw(Array.from([block]));
+    }
+  });
+};
+
 const bindEvent = (game, paddle, ball, blocks, canvas) => {
   // events
 
   bindGameInputEvent(game, paddle, ball);
 
   setInterval(function() {
-    var actions = Object.keys(game.actions);
-    for (var i = 0; i < actions.length; i++) {
-      var key = actions[i];
-      // log('g.keydowns[key]', g.keydowns[key])
-      if (game.keydowns[key]) {
-        game.actions[key](canvas.width);
-      }
-    }
-
-    // update
-    updateEvents(ball, paddle, blocks);
-    // clear
-    game.context.clearRect(0, 0, canvas.width, canvas.height);
-    // draw
-    game.draw(Array.from([paddle, ball]));
-    blocks.forEach(block => {
-      if (block.alive) {
-        game.draw(Array.from([block]));
-      }
-    });
+    runloop(game, paddle, ball, blocks, canvas);
   }, 1000 / 30);
 };
 
