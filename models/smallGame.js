@@ -4,6 +4,7 @@ class SmallGame {
     this.actions = {};
     this.keydowns = {};
     this.blocks = blocks;
+    this.score = 0;
   }
 
   drawImage(item) {

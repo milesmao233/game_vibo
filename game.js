@@ -93,15 +93,21 @@ function runGameActions(game, canvas) {
 }
 
 function updateEvents(game, ball, paddle) {
+  // pause
   if (ball.paused) {
     return;
   }
+
+  // ball move
   ball.move();
+
+  // ball touch the paddle
   if (paddle.collide(ball)) ball.rebound();
 
+  // ball touch the block
   game.blocks.forEach(block => {
     if (block.collide(ball)) {
-      block.kill();
+      block.kill(game);
       ball.rebound();
     }
   });
@@ -114,6 +120,7 @@ function reDrawGame(game, ball, paddle) {
       game.draw(Array.from([block]));
     }
   });
+  game.context.fillText("分数: " + game.score, 10, 580);
 }
 
 function loadLevel(n) {

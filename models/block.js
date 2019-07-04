@@ -10,11 +10,13 @@ class Block extends Item {
     this.lives = lives;
   }
 
-  kill() {
+  kill(game) {
     this.lives--;
     if (this.lives < 1) {
       this.alive = false;
     }
+    // update score
+    game.score += 100;
   }
 
   collide(ball) {
