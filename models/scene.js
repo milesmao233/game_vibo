@@ -30,9 +30,7 @@ class Scene {
 
   run(canvas) {
     let [paddle, ball] = [...this.items];
-    setTimeout(() => {
-      runloop(this, paddle, ball, canvas);
-    }, 1000 / 30);
+    runloop(this.game, this, paddle, ball, canvas);
   }
 
   drawImage(item) {
@@ -70,66 +68,66 @@ function loadLevel(n, image) {
   return blocks;
 }
 
-function bindGameInputEvent(game, paddle, ball) {
+function bindGameInputEvent(scene, paddle, ball) {
   window.addEventListener("keydown", function(event) {
     if (event.key == "p") {
       ball.pause();
       return;
     }
     if ("1234567".includes(event.key)) {
-      let blocks = loadLevel(Number(event.key), game.images["block"]);
+      let blocks = loadLevel(Number(event.key), scene.images["block"]);
 
-      game.changeLevel(blocks);
+      scene.changeLevel(blocks);
       return;
     }
-    game.keydowns[event.key] = true;
+    scene.keydowns[event.key] = true;
   });
 
   window.addEventListener("keyup", function(event) {
-    game.keydowns[event.key] = false;
+    scene.keydowns[event.key] = false;
   });
 
   // mouse drag
 
-  mouseDragItem(game);
+  mouseDragItem(scene);
 
   const ballSpeedControl = document.querySelector("#id-input-ball-speed");
   ballSpeedControl.addEventListener("input", function(event) {
     const input = event.target.value;
-    ball.speedX = Number(input);
-    ball.speedY = Number(input);
+    ball.speedX = ball.speedX > 0 ? Number(input) : -Number(input);
+    ball.speedY = ball.speedY > 0 ? Number(input) : -Number(input);
   });
 
   // record the press key into game object
-  game.registerAction("a", function() {
+  scene.registerAction("a", function() {
     paddle.moveLeft();
     if (!ball.fired) ball.moveLeft();
     // TODO
   });
 
-  game.registerAction("d", function(screenWidth) {
+  scene.registerAction("d", function(screenWidth) {
     paddle.moveRight(screenWidth);
     if (!ball.fired) ball.moveRight(screenWidth);
     // TODO
   });
 
-  game.registerAction("f", function() {
+  scene.registerAction("f", function() {
     ball.fire();
   });
 }
 
-function runloop(game, paddle, ball, canvas) {
-  runGameActions(game, canvas);
+function runloop(game, scene, paddle, ball, canvas) {
+  runGameActions(scene, canvas);
 
   // update
-  updateEvents(game, ball, paddle, canvas);
+  updateEvents(game, scene, ball, paddle, canvas);
   // clear
-  game.context.clearRect(0, 0, canvas.width, canvas.height);
+  scene.context.clearRect(0, 0, canvas.width, canvas.height);
   // draw
-  reDrawGame(game, paddle, ball);
+  reDrawGame(scene, paddle, ball);
 }
 
-function mouseDragItem(game) {
+function mouseDragItem(scene) {
   // distanceX: distanceX(dragPointX, itemPointX)
   let enableDrag = false,
     dragItem,
@@ -140,7 +138,7 @@ function mouseDragItem(game) {
     // click if in the item area
     let x = event.offsetX;
     let y = event.offsetY;
-    let canDragItems = Array.from([...game.items, ...game.blocks]);
+    let canDragItems = Array.from([...scene.items, ...scene.blocks]);
     if (beInArea(x, y, canDragItems)) {
       enableDrag = true;
       distanceX = dragItem.x - x;
@@ -177,23 +175,21 @@ function mouseDragItem(game) {
   }
 }
 
-function runGameActions(game, canvas) {
-  var actions = Object.keys(game.actions);
+function runGameActions(scene, canvas) {
+  var actions = Object.keys(scene.actions);
   for (var i = 0; i < actions.length; i++) {
     var key = actions[i];
     // log('g.keydowns[key]', g.keydowns[key])
-    if (game.keydowns[key]) {
-      game.actions[key](canvas.width);
+    if (scene.keydowns[key]) {
+      scene.actions[key](canvas.width);
     }
   }
 }
 
-function updateEvents(game, ball, paddle, canvas) {
+function updateEvents(game, scene, ball, paddle, canvas) {
   // game over
   if (ball.y > paddle.y) {
     game.gameOver = true;
-    game.run(canvas);
-    return;
   }
   // pause
   if (ball.paused) {
@@ -207,7 +203,7 @@ function updateEvents(game, ball, paddle, canvas) {
   if (paddle.collide(ball)) ball.rebound();
 
   // ball touch the block
-  game.blocks.forEach(block => {
+  scene.blocks.forEach(block => {
     if (block.collide(ball)) {
       block.kill(game);
       ball.rebound();
@@ -215,12 +211,12 @@ function updateEvents(game, ball, paddle, canvas) {
   });
 }
 
-function reDrawGame(game, ball, paddle) {
-  game.draw(Array.from([paddle, ball]));
-  game.blocks.forEach(block => {
+function reDrawGame(scene, ball, paddle) {
+  scene.draw(Array.from([paddle, ball]));
+  scene.blocks.forEach(block => {
     if (block.alive) {
-      game.draw(Array.from([block]));
+      scene.draw(Array.from([block]));
     }
   });
-  game.context.fillText("分数: " + game.score, 10, 580);
+  scene.context.fillText("分数: " + scene.score, 10, 580);
 }

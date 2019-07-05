@@ -3,13 +3,12 @@ class SceneEnd {
     this.context = context;
   }
 
-  run() {
-    setTimeout(() => {
-      this.draw();
-    }, 1000 / 30);
+  run(canvas) {
+    this.draw(canvas);
   }
 
-  draw() {
+  draw(canvas) {
+    this.context.clearRect(0, 0, canvas.width, canvas.height);
     this.context.fillText("游戏结束 ", 100, 280);
   }
 }

@@ -27,28 +27,15 @@ class SmallGame {
     let sceneStart = new Scene(this, this.context, this.images);
     sceneStart.bindEvents();
 
+    // 根据状态改场景
     setInterval(() => {
-      if (this.gameOver) {
-        sceneEnd.run();
-      } else {
-        sceneStart.run(canvas);
-      }
+      // if (this.gameOver) {
+      //   sceneEnd.run(canvas);
+      // } else {
+      //   sceneStart.run(canvas);
+      // }
+      sceneStart.run(canvas);
     }, 1000 / 30);
-  }
-
-  bindEvents() {
-    const paddleImage = this.images["paddle"];
-    const ballImage = this.images["ball"];
-    const blockImage = this.images["block"];
-
-    const paddle = new Paddle("paddle", paddleImage, 200, 550, 8);
-    const ball = new Ball("ball", ballImage, 230, 540, 8);
-
-    const blocks = loadLevel(3, blockImage);
-    this.blocks = blocks;
-
-    this.items = [paddle, ball];
-    bindGameInputEvent(this, paddle, ball);
   }
 }
 
