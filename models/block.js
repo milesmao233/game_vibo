@@ -2,10 +2,8 @@ import Item from "./main.js";
 import { log, rectIntersects } from "../utils.js";
 
 class Block extends Item {
-  constructor(path, x, y, lives, w, h) {
-    super(path, x, y);
-    this.w = w;
-    this.h = h;
+  constructor(name, image, x, y, lives) {
+    super(name, image, x, y);
     this.alive = true;
     this.lives = lives;
   }

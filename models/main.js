@@ -1,12 +1,11 @@
-var imageFromPath = function(path) {
-  var img = new Image();
-  img.src = path;
-  return img;
-};
+import { log } from "../utils.js";
 
 class Item {
-  constructor(path, x, y, speed) {
-    this.image = imageFromPath(path);
+  constructor(name, image, x, y, speed) {
+    this.name = name;
+    this.image = image;
+    this.width = image.width;
+    this.height = image.height;
     this.x = x;
     this.y = y;
     this.speed = speed;

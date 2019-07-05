@@ -1,8 +1,8 @@
 import Item from "./main.js";
 
 class Ball extends Item {
-  constructor(path, x, y, moveSpeed) {
-    super(path, x, y, moveSpeed);
+  constructor(name, image, x, y, moveSpeed) {
+    super(name, image, x, y, moveSpeed);
     this.speedX = 10;
     this.speedY = 10;
     this.fired = false;
