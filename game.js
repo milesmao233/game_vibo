@@ -1,5 +1,4 @@
 import { SmallGame } from "./models/index.js";
-import { log } from "./utils.js";
 
 const bindEvent = (game, canvas) => {
   game.loadImages().then(() => {

@@ -9,7 +9,7 @@ var imageFromPath = function(path) {
 };
 
 var rectIntersects = function(a, b) {
-  // 思路： 中心点的距离，小于等于宽或长的一半总和
+  // 思路： 中心点的距离，小于等于宽一半总和 / 长的一半总和
 
   let aMiddleX = a.x + a.width / 2,
     aMiddleY = a.y + a.height / 2,

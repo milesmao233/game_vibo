@@ -1,5 +1,6 @@
 import { Paddle, Ball, Block } from "./index.js";
 import levels from "../models/level.js";
+import { log } from "../utils.js";
 
 class SmallGame {
   constructor(context, images) {
@@ -32,9 +33,9 @@ class SmallGame {
     const blockImage = this.images["block"];
 
     const paddle = new Paddle("paddle", paddleImage, 200, 550, 8);
-    const ball = new Ball("ball", ballImage, 250, 520, 8);
+    const ball = new Ball("ball", ballImage, 230, 540, 8);
 
-    const blocks = loadLevel(1, blockImage);
+    const blocks = loadLevel(3, blockImage);
     this.blocks = blocks;
 
     this.items = [paddle, ball];
@@ -84,6 +85,66 @@ function getImages(path) {
   return p;
 }
 
+function loadLevel(n, image) {
+  n = n - 1;
+  var level = levels[n];
+  var blocks = level.map(block => {
+    var x = block[0];
+    var y = block[1];
+    var lives = block[2] || 1;
+    return new Block("block", image, x, y, lives);
+  });
+  return blocks;
+}
+
+function bindGameInputEvent(game, paddle, ball) {
+  window.addEventListener("keydown", function(event) {
+    if (event.key == "p") {
+      ball.pause();
+      return;
+    }
+    if ("1234567".includes(event.key)) {
+      let blocks = loadLevel(Number(event.key), game.images["block"]);
+
+      game.changeLevel(blocks);
+      return;
+    }
+    game.keydowns[event.key] = true;
+  });
+
+  window.addEventListener("keyup", function(event) {
+    game.keydowns[event.key] = false;
+  });
+
+  // mouse drag
+
+  mouseDragItem(game);
+
+  const ballSpeedControl = document.querySelector("#id-input-ball-speed");
+  ballSpeedControl.addEventListener("input", function(event) {
+    const input = event.target.value;
+    ball.speedX = Number(input);
+    ball.speedY = Number(input);
+  });
+
+  // record the press key into game object
+  game.registerAction("a", function() {
+    paddle.moveLeft();
+    if (!ball.fired) ball.moveLeft();
+    // TODO
+  });
+
+  game.registerAction("d", function(screenWidth) {
+    paddle.moveRight(screenWidth);
+    if (!ball.fired) ball.moveRight(screenWidth);
+    // TODO
+  });
+
+  game.registerAction("f", function() {
+    ball.fire();
+  });
+}
+
 function runloop(game, paddle, ball, canvas) {
   runGameActions(game, canvas);
 
@@ -93,6 +154,56 @@ function runloop(game, paddle, ball, canvas) {
   game.context.clearRect(0, 0, canvas.width, canvas.height);
   // draw
   reDrawGame(game, paddle, ball);
+}
+
+function mouseDragItem(game) {
+  // dragPoint = (x, y)
+  // itemPoint = (itemX, itemY)
+  // distance: itemX - x, itemY - y
+  let enableDrag = false,
+    dragItem,
+    distanceX,
+    distanceY;
+
+  window.addEventListener("mousedown", function(event) {
+    // click if in the item area
+    let x = event.offsetX;
+    let y = event.offsetY;
+    let canDragItems = Array.from([...game.items, ...game.blocks]);
+    if (beInArea(x, y, canDragItems)) {
+      enableDrag = true;
+      distanceX = dragItem.x - x;
+      distanceY = dragItem.y - y;
+    }
+  });
+
+  window.addEventListener("mousemove", function(event) {
+    let x = event.offsetX;
+    let y = event.offsetY;
+    if (enableDrag) {
+      dragItem.x = x + distanceX;
+      dragItem.y = y + distanceY;
+    }
+  });
+
+  window.addEventListener("mouseup", function(event) {
+    enableDrag = false;
+  });
+
+  function beInArea(x, y, items) {
+    const filter = items.filter(item => {
+      return (
+        x >= item.x &&
+        x <= item.x + item.width &&
+        y >= item.y &&
+        y <= item.y + item.height
+      );
+    });
+    if (filter.length == 1) {
+      dragItem = filter[0];
+      return true;
+    }
+  }
 }
 
 function runGameActions(game, canvas) {
@@ -135,59 +246,4 @@ function reDrawGame(game, ball, paddle) {
     }
   });
   game.context.fillText("分数: " + game.score, 10, 580);
-}
-
-function bindGameInputEvent(game, paddle, ball) {
-  window.addEventListener("keydown", function(event) {
-    if (event.key == "p") {
-      ball.pause();
-      return;
-    }
-    if ("1234567".includes(event.key)) {
-      let blocks = loadLevel(Number(event.key), game.images["block"]);
-
-      game.changeLevel(blocks);
-      return;
-    }
-    game.keydowns[event.key] = true;
-  });
-
-  window.addEventListener("keyup", function(event) {
-    game.keydowns[event.key] = false;
-  });
-
-  const ballSpeedControl = document.querySelector("#id-input-ball-speed");
-  ballSpeedControl.addEventListener("input", function(event) {
-    const input = event.target.value;
-    ball.speedX = Number(input);
-    ball.speedY = Number(input);
-  });
-
-  game.registerAction("a", function() {
-    paddle.moveLeft();
-    if (!ball.fired) ball.moveLeft();
-    // TODO
-  });
-
-  game.registerAction("d", function(screenWidth) {
-    paddle.moveRight(screenWidth);
-    if (!ball.fired) ball.moveRight(screenWidth);
-    // TODO
-  });
-
-  game.registerAction("f", function() {
-    ball.fire();
-  });
-}
-
-function loadLevel(n, image) {
-  n = n - 1;
-  var level = levels[n];
-  var blocks = level.map(block => {
-    var x = block[0];
-    var y = block[1];
-    var lives = block[2] || 1;
-    return new Block("block", image, x, y, lives);
-  });
-  return blocks;
 }
