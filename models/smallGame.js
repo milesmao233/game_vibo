@@ -28,7 +28,6 @@ class SmallGame {
   }
 
   bindEvents() {
-    log("this.images3", this.images);
     var paddleImage = this.images["paddle"];
     var ballImage = this.images["ball"];
     var blockImage = this.images["block"];
