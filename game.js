@@ -2,8 +2,7 @@ import { SmallGame } from "./models/index.js";
 
 const bindEvent = (game, canvas) => {
   game.loadImages().then(() => {
-    game.bindEvents();
-    game.run(canvas);
+    game.runWithScene(canvas);
   });
 };
 
