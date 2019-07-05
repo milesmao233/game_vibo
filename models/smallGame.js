@@ -1,4 +1,3 @@
-import { log } from "../utils.js";
 import { Paddle, Ball, Block } from "./index.js";
 import levels from "../models/level.js";
 
@@ -28,12 +27,12 @@ class SmallGame {
   }
 
   bindEvents() {
-    var paddleImage = this.images["paddle"];
-    var ballImage = this.images["ball"];
-    var blockImage = this.images["block"];
+    const paddleImage = this.images["paddle"];
+    const ballImage = this.images["ball"];
+    const blockImage = this.images["block"];
 
-    var paddle = new Paddle("paddle", paddleImage, 200, 550, 8);
-    var ball = new Ball("ball", ballImage, 250, 520, 8);
+    const paddle = new Paddle("paddle", paddleImage, 200, 550, 8);
+    const ball = new Ball("ball", ballImage, 250, 520, 8);
 
     const blocks = loadLevel(1, blockImage);
     this.blocks = blocks;

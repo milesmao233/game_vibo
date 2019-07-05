@@ -1,5 +1,4 @@
-import { Block, SmallGame } from "./models/index.js";
-import levels from "./models/level.js";
+import { SmallGame } from "./models/index.js";
 import { log } from "./utils.js";
 
 const bindEvent = (game, canvas) => {
