@@ -1,5 +1,5 @@
-import Item from "./main.js";
-import { log, rectIntersects } from "../utils.js";
+import Item from "./item.js";
+import { log, rectIntersects } from "../../utils.js";
 
 class Paddle extends Item {
   constructor(name, image, x, y, speed) {

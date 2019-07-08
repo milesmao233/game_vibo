@@ -21,8 +21,16 @@ class A {
     this.x = x;
     this.y = y;
     this.speed = speed;
+    this.m = function() {
+      console.log("this", this);
+    };
   }
 }
+
+const a = new A("miles", { width: 10, height: 20 }, 10, 20, 8);
+setTimeout(() => {
+  a.m();
+}, 1000);
 
 class B extends A {
   constructor(name, image, x, y, speed) {
@@ -38,6 +46,9 @@ class C extends A {
 }
 
 const a = new A("miles", { width: 10, height: 20 }, 10, 20, 8);
+setTimeout(() => {
+  a.m();
+}, 0);
 
 const b = new B("gg", { width: 1, height: 2 }, 2, 2, 8);
 

@@ -1,7 +1,7 @@
-import levels from "./level.js";
-import { Paddle, Ball, Block } from "./index.js";
+import levels from "../level.js";
+import { Paddle, Ball, Block } from "../item/index.js";
 
-class Scene {
+class SceneStart {
   constructor(game, context, images) {
     this.game = game;
     this.context = context;
@@ -52,7 +52,7 @@ class Scene {
   }
 }
 
-export default Scene;
+export default SceneStart;
 
 // ******************
 
@@ -189,7 +189,7 @@ function runGameActions(scene, canvas) {
 function updateEvents(game, scene, ball, paddle, canvas) {
   // game over
   if (ball.y > paddle.y) {
-    game.gameOver = true;
+    game.gameScene = game.scene.end;
   }
   // pause
   if (ball.paused) {

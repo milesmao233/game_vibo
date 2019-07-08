@@ -1,11 +1,13 @@
-import { Paddle, Ball, Block, Scene, SceneEnd } from "./index.js";
+import { SceneStart, SceneEnd, SceneTitle } from "./scene/index.js";
 import { log } from "../utils.js";
 
 class SmallGame {
-  constructor(context, images) {
+  constructor(canvas, context, images) {
+    this.canvas = canvas;
     this.context = context;
     this.images = images;
-    this.gameOver = false;
+    this.gameScene = null;
+    this.scene = {};
   }
 
   loadImages() {
@@ -23,18 +25,28 @@ class SmallGame {
   }
 
   runWithScene(canvas) {
-    let sceneEnd = new SceneEnd(this.context);
-    let sceneStart = new Scene(this, this.context, this.images);
+    let sceneTitle = new SceneTitle(
+      this,
+      this.canvas,
+      this.context,
+      this.images
+    );
+    let sceneStart = new SceneStart(this, this.context, this.images);
+    let sceneEnd = new SceneEnd(this, this.context);
+    this.scene = {
+      title: sceneTitle,
+      start: sceneStart,
+      end: sceneEnd
+    };
+    this.gameScene = this.scene.title;
+
     sceneStart.bindEvents();
+    sceneTitle.bindEvents();
+    sceneEnd.bindEvents();
 
     // 根据状态改场景
     setInterval(() => {
-      // if (this.gameOver) {
-      //   sceneEnd.run(canvas);
-      // } else {
-      //   sceneStart.run(canvas);
-      // }
-      sceneStart.run(canvas);
+      this.gameScene.run(canvas);
     }, 1000 / 30);
   }
 }

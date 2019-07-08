@@ -1,5 +1,5 @@
-import Item from "./main.js";
-import { log } from "../utils.js";
+import Item from "./item.js";
+import { log } from "../../utils.js";
 
 class Ball extends Item {
   constructor(name, image, x, y, moveSpeed) {
@@ -23,7 +23,6 @@ class Ball extends Item {
   }
 
   move() {
-    log("ball speed", this.speedX, this.speedY);
     if (this.fired) {
       if (this.x < 0 || this.x > 600) {
         this.speedX = -this.speedX;

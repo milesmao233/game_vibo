@@ -1,4 +1,4 @@
-import { log } from "../utils.js";
+import { log } from "../../utils.js";
 
 class Item {
   constructor(name, image, x, y, speed) {

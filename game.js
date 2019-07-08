@@ -11,12 +11,13 @@ const __main = () => {
   const context = canvas.getContext("2d");
 
   const images = {
-    ball: "ball.png",
-    paddle: "paddle.png",
-    block: "block.png"
+    ball: "img/ball.png",
+    paddle: "img/paddle.png",
+    block: "img/block.png",
+    arrow: "img/arrow.png"
   };
 
-  const game = new SmallGame(context, images);
+  const game = new SmallGame(canvas, context, images);
 
   bindEvent(game, canvas);
 };
