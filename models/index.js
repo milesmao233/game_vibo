@@ -1,3 +1,3 @@
-import SmallGame from "./smallGame.js";
+import Game from "./game.js";
 
-export { SmallGame };
+export { Game };
