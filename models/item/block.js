@@ -1,5 +1,5 @@
 import Item from "./item.js";
-import { log, rectIntersects } from "../../utils.js";
+import { log, rectIntersects } from "../../utils/utils.js";
 
 class Block extends Item {
   constructor(name, image, x, y, lives) {

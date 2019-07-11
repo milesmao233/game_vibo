@@ -1,5 +1,5 @@
 import Item from "./item.js";
-import { log } from "../../utils.js";
+import { log } from "../../utils/utils.js";
 
 class Ball extends Item {
   constructor(name, image, x, y, moveSpeed) {

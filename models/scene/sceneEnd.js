@@ -1,42 +1,37 @@
-class SceneEnd {
-  constructor(game, context) {
-    this.game = game;
-    this.context = context;
-  }
+import { log } from "../../utils/utils.js";
 
-  run(canvas) {
-    this.draw(canvas);
-  }
+import { SceneStart, Scene, SceneTitle } from "./index.js";
 
-  draw(canvas) {
-    this.context.clearRect(0, 0, canvas.width, canvas.height);
-    this.context.fillText("Game Over, 按R重新开始游戏 ", 180, 250);
-    this.context.fillText("Game Over, 按T返回菜单 ", 180, 280);
-  }
+class SceneEnd extends Scene {
+    constructor(game) {
+        super(game);
+        this.context = game.context;
+        this.setup();
+    }
 
-  bindEvents() {
-    this.bindGameInputEvent();
-  }
+    setup() {
+        this.registerAction("r", () => {
+            let s = new SceneStart(this.game);
+            this.game.replaceScene(s);
+        });
+        this.registerAction("t", () => {
+            let s = new SceneTitle(this.game);
+            this.game.replaceScene(s);
+        });
+    }
 
-  bindGameInputEvent() {
-    window.addEventListener("keydown", event => {
-      // 重置
+    draw() {
+        this.context.clearRect(
+            0,
+            0,
+            this.game.canvas.width,
+            this.game.canvas.height
+        );
+        this.context.fillText("Game Over, 按R重新开始游戏 ", 180, 250);
+        this.context.fillText("Game Over, 按T返回菜单 ", 180, 280);
+    }
 
-      if (event.key == "r") {
-        for (let scene in this.game.scene) {
-          this.game.scene[scene].bindEvents();
-        }
-
-        this.game.gameScene = this.game.scene.start;
-      } else if (event.key == "t") {
-        for (let scene in this.game.scene) {
-          this.game.scene[scene].bindEvents();
-        }
-
-        this.game.gameScene = this.game.scene.title;
-      }
-    });
-  }
+    update() {}
 }
 
 export default SceneEnd;
