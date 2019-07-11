@@ -1,6 +1,6 @@
 import { Arrow } from "../item/index.js";
 import { log } from "../../utils/utils.js";
-import { Scene, SceneStart } from "./index.js";
+import { Scene, SceneStart, SceneModify } from "./index.js";
 
 class SceneTitle extends Scene {
     constructor(game) {
@@ -38,6 +38,10 @@ class SceneTitle extends Scene {
                 this.game.replaceScene(s);
             }
             // TODO Modify Part
+            else if (this.arrow.choice == "modify") {
+                const s = new SceneModify(this.game, 1);
+                this.game.replaceScene(s);
+            }
         });
     }
 

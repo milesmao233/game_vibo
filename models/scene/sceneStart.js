@@ -9,7 +9,7 @@ class SceneStart extends Scene {
         this.context = game.context;
         this.images = game.mages;
         this.score = 0;
-
+        this.blocks = [];
         this.setup();
     }
 
@@ -19,7 +19,7 @@ class SceneStart extends Scene {
         const blockImage = this.game.images["block"];
         const paddle = new Paddle("paddle", paddleImage, 200, 550, 8);
         const ball = new Ball("ball", ballImage, 230, 540, 8);
-        const blocks = this.loadLevel(3, blockImage);
+        const blocks = this.loadLevel(5, blockImage);
         this.ball = ball;
         this.paddle = paddle;
         this.blocks = blocks;
@@ -98,24 +98,8 @@ class SceneStart extends Scene {
         this.context.fillText("分数: " + this.score, 10, 580);
     }
 
-    drawImage(item) {
-        this.context.drawImage(item.image, item.x, item.y);
-    }
-
     changeLevel(blocks) {
         this.blocks = [...blocks];
-    }
-
-    loadLevel(n, image) {
-        n = n - 1;
-        var level = levels[n];
-        var blocks = level.map(block => {
-            var x = block[0];
-            var y = block[1];
-            var lives = block[2] || 1;
-            return new Block("block", image, x, y, lives);
-        });
-        return blocks;
     }
 
     mouseDragItem() {
@@ -125,7 +109,7 @@ class SceneStart extends Scene {
             distanceX,
             distanceY;
 
-        this.game.canvas.addEventListener("mousedown", function(event) {
+        this.game.canvas.addEventListener("mousedown", event => {
             // click if in the item area
             let x = event.offsetX;
             let y = event.offsetY;
@@ -141,7 +125,7 @@ class SceneStart extends Scene {
             }
         });
 
-        this.game.canvas.addEventListener("mousemove", function(event) {
+        this.game.canvas.addEventListener("mousemove", event => {
             let x = event.offsetX;
             let y = event.offsetY;
             if (enableDrag) {
@@ -150,7 +134,7 @@ class SceneStart extends Scene {
             }
         });
 
-        this.game.canvas.addEventListener("mouseup", function(event) {
+        this.game.canvas.addEventListener("mouseup", () => {
             enableDrag = false;
         });
 

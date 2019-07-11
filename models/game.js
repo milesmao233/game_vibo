@@ -1,5 +1,5 @@
-import { SceneStart, SceneEnd, SceneTitle } from "./scene/index.js";
 import { log } from "../utils/utils.js";
+import levels from "./level.js";
 
 class Game {
     constructor(images) {
@@ -7,6 +7,7 @@ class Game {
         this.context = this.canvas.getContext("2d");
         this.images = images;
         this.scene = null;
+        this.levels = levels;
     }
 
     // run Input Actions
@@ -45,6 +46,16 @@ class Game {
         }, 1000 / 30);
     }
 
+    // *************
+
+    // checkoutToModifyScene() {
+    //     const modifyButton = document.querySelector("#modify-items");
+    //     modifyButton.addEventListener("click", () => {
+    //         let s = new SceneModify(this);
+    //         this.replaceScene(s);
+    //     });
+    // }
+
     imageByName(name) {
         var img = this.images[name];
         var image = {
@@ -55,7 +66,6 @@ class Game {
         return image;
     }
 
-    // *************
     loadImages() {
         let s = [];
         let names = [];
