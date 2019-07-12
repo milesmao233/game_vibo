@@ -1,5 +1,6 @@
 import { ImageMain } from "./index.js";
 import { log, randomBetween } from "../../utils.js";
+import config from "../config.js";
 
 class Particle extends ImageMain {
     constructor(game, x, y, scene) {
@@ -15,7 +16,7 @@ class Particle extends ImageMain {
         this.y = y;
         this.vx = randomBetween(-1, 1);
         this.vy = randomBetween(-1, 1);
-        this.life = 30;
+        this.life = config.boom_time;
     }
 
     update() {

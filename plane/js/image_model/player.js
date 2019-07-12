@@ -30,6 +30,7 @@ class Player extends ImageMain {
             let b = new Bullet(this.game);
             b.x = x;
             b.y = y;
+            this.scene.bullets.push(b);
             this.scene.addElement(b);
         }
     }

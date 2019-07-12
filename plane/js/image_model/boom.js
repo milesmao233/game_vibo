@@ -2,16 +2,16 @@ import { Particle } from "./index.js";
 import config from "../config.js";
 
 class Boom {
-    constructor(game) {
+    constructor(game, x, y) {
         this.game = game;
-        this.setup();
+        this.setup(x, y);
     }
 
-    setup() {
+    setup(x, y) {
         this.name = "boom";
         this.id = new Date().getTime();
-        this.x = 150;
-        this.y = 200;
+        this.x = x;
+        this.y = y;
         this.numParticles = 20;
         this.particles = [];
         this.life = config.boom_time;
@@ -24,7 +24,7 @@ class Boom {
         }
         // 添加小火花
         if (this.particles.length < this.numParticles) {
-            const p = new Particle(this.game, 150, 200, this.scene);
+            const p = new Particle(this.game, this.x, this.y, this.scene);
             this.particles.push(p);
         }
         // 更新所有小火花

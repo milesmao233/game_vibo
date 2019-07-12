@@ -7,6 +7,7 @@ class SceneStart extends Scene {
     constructor(game) {
         super(game);
         this.enemies = [];
+        this.bullets = [];
         this.setup();
         this.setupInputs();
     }
@@ -48,6 +49,20 @@ class SceneStart extends Scene {
             let element = new Enemy(this.game);
             this.enemies.push(element);
             this.addElement(element);
+        }
+    }
+
+    update() {
+        super.update();
+
+        for (let enemy of this.enemies) {
+            for (let bullet of this.bullets) {
+                if (enemy.collide(bullet)) {
+                    enemy.kill();
+                    bullet.kill();
+                    enemy.boom();
+                }
+            }
         }
     }
 }

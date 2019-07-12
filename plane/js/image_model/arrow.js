@@ -7,6 +7,7 @@ class Arrow extends ImageMain {
     }
 
     setup() {
+        this.choice = "start";
         this.w = 30;
         this.h = 30;
     }

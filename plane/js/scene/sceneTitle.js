@@ -18,9 +18,6 @@ class SceneTitle extends Scene {
         this.addElement(this.arrow);
         this.addElement(labelStart);
         this.addElement(labelAbout);
-
-        this.boom = new Boom(this.game);
-        this.addElement(this.boom);
     }
 
     setupInputs() {
