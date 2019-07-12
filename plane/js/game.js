@@ -1,13 +1,9 @@
-import { log } from "../utils/utils.js";
-import levels from "./level.js";
-
 class Game {
     constructor(images) {
         this.canvas = document.querySelector("#id-canvas");
         this.context = this.canvas.getContext("2d");
         this.images = images;
         this.scene = null;
-        this.levels = levels;
     }
 
     // run Input Actions
@@ -46,24 +42,14 @@ class Game {
         }, 1000 / 30);
     }
 
-    // *************
-
-    // checkoutToModifyScene() {
-    //     const modifyButton = document.querySelector("#modify-items");
-    //     modifyButton.addEventListener("click", () => {
-    //         let s = new SceneModify(this);
-    //         this.replaceScene(s);
-    //     });
-    // }
-
-    imageByName(name) {
+    textureByName(name) {
         var img = this.images[name];
-        var image = {
-            w: img.width,
-            h: img.height,
-            image: img
-        };
-        return image;
+        // var image = {
+        //     w: img.width,
+        //     h: img.height,
+        //     image: img
+        // };
+        return img;
     }
 
     loadImages() {

@@ -1,27 +1,27 @@
 {
-  "name": "vibo",
-  "version": "1.0.0",
-  "description": "",
-  "main": "game.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "open": "http-server -c-1 ",
-    "localtunnel": "lt --port 8080 --subdomain miles",
-    "share": "npm-run-all --parallel open localtunnel"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/milesmao233/game_vibo.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/milesmao233/game_vibo/issues"
-  },
-  "homepage": "https://github.com/milesmao233/game_vibo#readme",
-  "devDependencies": {
-    "localtunnel": "^1.9.2",
-    "npm-run-all": "^4.1.5"
-  }
+    "name": "vibo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "game.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "http-server -c-1 ",
+        "localtunnel": "lt --port 8080 --subdomain miles",
+        "share": "npm-run-all --parallel open localtunnel"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/milesmao233/game_vibo.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/milesmao233/game_vibo/issues"
+    },
+    "homepage": "https://github.com/milesmao233/game_vibo#readme",
+    "devDependencies": {
+        "localtunnel": "^1.9.2",
+        "npm-run-all": "^4.1.5"
+    }
 }

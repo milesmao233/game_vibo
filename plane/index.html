@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>game</title>
+        <style>
+            .container {
+                display: flex;
+                justify-content: space-around;
+            }
+
+            canvas {
+                border: 1px black solid;
+                flex-direction: column;
+            }
+
+            .operation {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            li {
+                list-style-type: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <canvas id="id-canvas" width="480" height="850"></canvas>
+            <div class="operation">
+                <div class="">
+                    <label for="">
+                        飞机速度调整
+                        <input
+                            class="auto-slider"
+                            type="range"
+                            value=""
+                            data-type="player_speed"
+                        />
+                        <div>
+                            <span>飞机速度:</span>
+                            <span class="speed-label"></span>
+                        </div>
+                    </label>
+                </div>
+                <div class="">
+                    <label for="">
+                        子弹速度调整
+                        <input
+                            class="auto-slider"
+                            type="range"
+                            value=""
+                            data-type="bullet_speed"
+                        />
+                        <div>
+                            <span>子弹速度:</span>
+                            <span class="speed-label"></span>
+                        </div>
+                    </label>
+                </div>
+                <div></div>
+            </div>
+        </div>
+        <div>
+            ball speed:
+            <input id="id-input-ball-speed" type="range" value="1" />
+        </div>
+
+        <script src="main.js" type="module"></script>
+    </body>
+</html>
