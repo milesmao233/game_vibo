@@ -14,12 +14,14 @@ class SceneEnd extends Scene {
         const labelRestart = new Label(
             this.game,
             "Game Over, 按R重新开始游戏",
+            "restart",
             100,
             250
         );
         const labelBack = new Label(
             this.game,
             "Game Over, 按T返回菜单",
+            "back",
             100,
             300
         );

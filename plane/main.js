@@ -1,6 +1,6 @@
 import Game from "./js/game.js";
 import { SceneTitle } from "./js/scene/index.js";
-import { log, es, bindAll } from "./utils.js";
+import { log, es, bindAll, e } from "./utils.js";
 import config from "./js/config.js";
 
 const showPageData = () => {
@@ -25,6 +25,11 @@ const bindPageEvents = () => {
         let label = target.closest("label").querySelector(".speed-label");
         label.innerText = value;
     });
+
+    //// debug the offsetX and offsetY
+    // e("canvas").addEventListener("click", event => {
+    //     log(event);
+    // });
 };
 
 const __main = () => {

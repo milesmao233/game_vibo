@@ -6,7 +6,7 @@ class Enemy extends ImageMain {
         const type = randomBetween(0, 2);
         const name = "enemy" + type;
         super(game, name);
-
+        this.type = type;
         this.w = this.image.width / 2;
         this.h = this.image.height / 2;
         this.setup();
@@ -15,7 +15,7 @@ class Enemy extends ImageMain {
     setup() {
         this.alive = true;
         this.speed = randomBetween(2, 5);
-        this.x = randomBetween(0, 450);
+        this.x = randomBetween(0, 400);
         this.y = -randomBetween(0, 200);
     }
 
