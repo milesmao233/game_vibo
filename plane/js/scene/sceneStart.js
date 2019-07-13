@@ -1,5 +1,5 @@
 import { log } from "../../utils.js";
-import { Scene } from "./index.js";
+import { Scene, SceneEnd } from "./index.js";
 import { ImageMain } from "../image_model/index.js";
 import { Player, Enemy } from "../image_model/index.js";
 
@@ -55,6 +55,7 @@ class SceneStart extends Scene {
     update() {
         super.update();
 
+        // bullet crash the enemy
         for (let enemy of this.enemies) {
             for (let bullet of this.bullets) {
                 if (enemy.collide(bullet)) {
@@ -62,6 +63,14 @@ class SceneStart extends Scene {
                     bullet.kill();
                     enemy.boom();
                 }
+            }
+        }
+
+        // gameover parts
+        for (let enemy of this.enemies) {
+            if (enemy.collide(this.player)) {
+                const s = new SceneEnd(this.game);
+                this.game.replaceScene(s);
             }
         }
     }
