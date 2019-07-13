@@ -34,10 +34,10 @@ class SceneStart extends Scene {
             this.player.moveRight();
         });
         this.registerAction("s", () => {
-            this.player.moveUp();
+            this.player.moveDown();
         });
         this.registerAction("w", () => {
-            this.player.moveDown();
+            this.player.moveUp();
         });
         this.registerAction("j", () => {
             this.player.fire();

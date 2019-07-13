@@ -37,18 +37,35 @@ class Player extends ImageMain {
 
     moveLeft() {
         this.x -= this.speed;
+        if (this.x < 0) {
+            this.x = 0;
+        }
     }
 
     moveRight() {
         this.x += this.speed;
+        let gameWidth = this.scene.game.canvas.width;
+        let maxWidth = gameWidth - this.w;
+
+        if (this.x > maxWidth) {
+            this.x = maxWidth;
+        }
     }
 
     moveUp() {
-        this.y += this.speed;
+        this.y -= this.speed;
+        if (this.y < 0) {
+            this.y = 0;
+        }
     }
 
     moveDown() {
-        this.y -= this.speed;
+        this.y += this.speed;
+        let gameHeight = this.scene.game.canvas.height;
+        let maxHeight = gameHeight - this.h;
+        if (this.y > maxHeight) {
+            this.y = maxHeight;
+        }
     }
 }
 
