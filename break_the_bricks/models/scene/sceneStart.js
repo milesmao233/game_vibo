@@ -33,6 +33,8 @@ class SceneStart extends Scene {
             580
         );
         this.addElement(labelScore);
+
+        this.showOrHideModifyPage();
     }
 
     setupInputs() {

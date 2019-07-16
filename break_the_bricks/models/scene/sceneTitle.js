@@ -26,20 +26,20 @@ class SceneTitle extends Scene {
 
         this.addElement(labelStart);
         this.addElement(labelModify);
+        this.showOrHideModifyPage();
     }
 
     setupInputs() {
         // 绑定input
-        this.registerAction("ArrowDown", () => {
+        this.registerAction("s", () => {
             this.arrow.moveDown();
         });
 
-        this.registerAction("ArrowUp", () => {
+        this.registerAction("w", () => {
             this.arrow.moveUp();
         });
 
-        this.registerAction("Enter", () => {
-            log("this.arrow", this.arrow.choice);
+        this.registerAction("j", () => {
             if (this.arrow.choice === "start") {
                 const s = new SceneStart(this.game);
                 this.game.replaceScene(s);
@@ -47,6 +47,7 @@ class SceneTitle extends Scene {
             // TODO Modify Part
             else if (this.arrow.choice === "modify") {
                 const s = new SceneModify(this.game, 1);
+                log("s", s);
                 this.game.replaceScene(s);
             }
         });

@@ -1,4 +1,4 @@
-import { log } from "../../utils/utils.js";
+import { e, log } from "../../utils/utils.js";
 import { Block } from "../item/index.js";
 import levels from "../level.js";
 class Scene {
@@ -8,6 +8,7 @@ class Scene {
         this.keydowns = {};
         this.elements = [];
         this.levels = this.game.levels;
+        this.modifyPage = false;
 
         window.addEventListener("keydown", event => {
             this.keydowns[event.key] = true;
@@ -71,6 +72,16 @@ class Scene {
 
     registerAction(key, callback) {
         this.actions[key] = callback;
+    }
+
+    showOrHideModifyPage() {
+        log("this.modifyPage", this.modifyPage);
+        const modifyDiv = e(".modify-items-container");
+        if (this.modifyPage) {
+            modifyDiv.style.display = "block";
+        } else {
+            modifyDiv.style.display = "none";
+        }
     }
 
     loadLevel(n) {

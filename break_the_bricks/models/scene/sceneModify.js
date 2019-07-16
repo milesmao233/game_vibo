@@ -10,16 +10,18 @@ class SceneModify extends Scene {
         this.level = level;
         this.blocks = this.loadLevel(level);
         this.clicks = [];
+        this.modifyPage = true;
         this.setup();
         this.setupInputs();
     }
 
     setup() {
-        // 显示编辑页面
-        const modifyDiv = e(".modify-items-container");
-        modifyDiv.style.display = "block";
+        // // 显示编辑页面
+        // const modifyDiv = e(".modify-items-container");
+        // modifyDiv.style.display = "block";
 
         this.addBlocks(this.blocks);
+        this.showOrHideModifyPage();
     }
 
     setupInputs() {

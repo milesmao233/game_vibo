@@ -27,11 +27,10 @@ class SceneEnd extends Scene {
             280
         );
 
-        log("labelRestart", labelRestart);
-        log("labelBack", labelBack);
-
         this.addElement(labelRestart);
         this.addElement(labelBack);
+
+        this.showOrHideModifyPage();
     }
 
     setupInputs() {
