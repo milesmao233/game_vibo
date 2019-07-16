@@ -1,15 +1,39 @@
 import { log } from "../../utils/utils.js";
 
 import { SceneStart, Scene, SceneTitle } from "./index.js";
+import { Label } from "../item/index.js";
 
 class SceneEnd extends Scene {
     constructor(game) {
         super(game);
         this.context = game.context;
         this.setup();
+        this.setupInputs();
     }
 
     setup() {
+        const labelRestart = new Label(
+            this.game,
+            "Game Over, 按R重新开始游戏 ",
+            "restart",
+            180,
+            250
+        );
+        const labelBack = new Label(
+            this.game,
+            "Game Over, 按T返回菜单 ",
+            "back",
+            180,
+            280
+        );
+
+        this.addElement(labelRestart);
+        this.addElement(labelBack);
+
+        this.showOrHideModifyPage();
+    }
+
+    setupInputs() {
         this.registerAction("r", () => {
             let s = new SceneStart(this.game);
             this.game.replaceScene(s);
@@ -19,19 +43,6 @@ class SceneEnd extends Scene {
             this.game.replaceScene(s);
         });
     }
-
-    draw() {
-        this.context.clearRect(
-            0,
-            0,
-            this.game.canvas.width,
-            this.game.canvas.height
-        );
-        this.context.fillText("Game Over, 按R重新开始游戏 ", 180, 250);
-        this.context.fillText("Game Over, 按T返回菜单 ", 180, 280);
-    }
-
-    update() {}
 }
 
 export default SceneEnd;

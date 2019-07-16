@@ -49,13 +49,8 @@ class Game {
     // *************
 
     imageByName(name) {
-        var img = this.images[name];
-        var image = {
-            w: img.width,
-            h: img.height,
-            image: img
-        };
-        return image;
+        const img = this.images[name];
+        return img;
     }
 
     loadImages() {
