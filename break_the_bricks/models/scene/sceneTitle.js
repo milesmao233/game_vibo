@@ -1,4 +1,4 @@
-import { Arrow } from "../item/index.js";
+import { Arrow, Label } from "../item/index.js";
 import { log } from "../../utils/utils.js";
 import { Scene, SceneStart, SceneModify } from "./index.js";
 
@@ -6,23 +6,28 @@ class SceneTitle extends Scene {
     constructor(game) {
         super(game);
         this.setup();
+        this.setupInputs();
     }
 
     setup() {
         this.canvas = this.game.canvas;
         this.context = this.game.context;
-        this.images = this.game.images;
-        const arrowImage = this.game.images["arrow"];
-        this.arrow = new Arrow(
-            "arrow",
-            arrowImage,
-            200,
-            550,
-            192,
-            228,
-            "start"
-        );
+        this.arrow = new Arrow(this.game);
+        this.addElement(this.arrow);
 
+        const labelStart = new Label(this.game, "开始游戏 ", "start", 230, 250);
+        const labelModify = new Label(
+            this.game,
+            "编辑关卡 ",
+            "modify",
+            230,
+            300
+        );
+        this.addElement(labelStart);
+        this.addElement(labelModify);
+    }
+
+    setupInputs() {
         // 绑定input
         this.registerAction("ArrowDown", () => {
             this.arrow.moveDown();
@@ -43,19 +48,6 @@ class SceneTitle extends Scene {
                 this.game.replaceScene(s);
             }
         });
-    }
-
-    draw() {
-        this.context.font = "normal 20px Verdana";
-        this.context.fillText("开始游戏 ", 230, 250);
-        this.context.fillText("编辑关卡 ", 230, 300);
-        this.context.drawImage(
-            this.arrow.image,
-            this.arrow.offsetX,
-            this.arrow.offsetY,
-            30,
-            30
-        );
     }
 }
 

@@ -6,6 +6,7 @@ class Scene {
         this.game = game;
         this.actions = {};
         this.keydowns = {};
+        this.elements = [];
         this.levels = this.game.levels;
 
         window.addEventListener("keydown", event => {
@@ -25,12 +26,39 @@ class Scene {
         }
     }
 
-    drawImage(item) {
-        this.context.drawImage(item.image, item.x, item.y);
+    draw() {
+        for (let element of this.elements) {
+            element.draw();
+        }
+    }
+    update() {
+        for (let element of this.elements) {
+            element.update();
+        }
     }
 
-    draw() {}
-    update() {}
+    addElement(element) {
+        element.scene = this;
+        this.elements.push(element);
+    }
+
+    addElements(arr) {
+        for (let element of arr) {
+            element.scene = this;
+            this.elements.push(element);
+        }
+    }
+
+    removeElements(arr) {
+        for (let a of arr) {
+            let index = this.elements.findIndex(e => e.id === a.id);
+            this.elements.splice(index, 1);
+        }
+    }
+
+    drawImage(item) {
+        this.context.drawImage(item.image, item.x, item.y, item.w, item.h);
+    }
 
     registerAction(key, callback) {
         this.actions[key] = callback;
