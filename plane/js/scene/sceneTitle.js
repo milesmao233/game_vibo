@@ -22,15 +22,15 @@ class SceneTitle extends Scene {
 
     setupInputs() {
         // 绑定input
-        this.registerAction("ArrowDown", () => {
+        this.registerAction("s", () => {
             this.arrow.moveDown();
         });
 
-        this.registerAction("ArrowUp", () => {
+        this.registerAction("w", () => {
             this.arrow.moveUp();
         });
 
-        this.registerAction("Enter", () => {
+        this.registerAction("j", () => {
             if (this.arrow.choice == "start") {
                 const s = new SceneStart(this.game);
                 this.game.replaceScene(s);
