@@ -8,26 +8,10 @@ class SceneModify extends Scene {
         super(game);
         this.context = game.context;
         this.level = level;
-        this.blocks = [];
-        this.blockImage = this.game.images["block"];
+        this.blocks = this.loadLevel(level);
         this.clicks = [];
         this.setup();
-
-        this.game.canvas.addEventListener("click", event => {
-            let clickX = event.offsetX;
-            let clickY = event.offsetY;
-            const lives = Number(e("#life-select").value);
-            this.clicks.push([clickX, clickY, lives]);
-
-            let block = new Block(
-                "block",
-                this.blockImage,
-                clickX,
-                clickY,
-                lives
-            );
-            this.blocks.push(block);
-        });
+        this.setupInputs();
     }
 
     setup() {
@@ -35,9 +19,19 @@ class SceneModify extends Scene {
         const modifyDiv = e(".modify-items-container");
         modifyDiv.style.display = "block";
 
-        // 显示砖块
-        let blocks = this.loadLevel(this.level, this.blockImage);
-        this.blocks = blocks;
+        this.addBlocks(this.blocks);
+    }
+
+    setupInputs() {
+        this.game.canvas.addEventListener("click", event => {
+            let clickX = event.offsetX;
+            let clickY = event.offsetY;
+            const lives = Number(e("#life-select").value);
+            this.clicks.push([clickX, clickY, lives]);
+
+            let block = new Block(this.game, clickX, clickY, lives);
+            this.addElement(block);
+        });
 
         // 绑定完成和取消事件
         const cancel = e(".btn-cancel");
@@ -54,11 +48,11 @@ class SceneModify extends Scene {
         });
     }
 
-    draw() {
-        this.blocks.forEach(block => {
-            this.drawImage(block);
-        });
-    }
+    // draw() {
+    //     this.blocks.forEach(block => {
+    //         this.drawImage(block);
+    //     });
+    // }
 
     update() {
         let input = e("#editor-input");

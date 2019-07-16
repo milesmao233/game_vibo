@@ -23,6 +23,7 @@ class SceneTitle extends Scene {
             230,
             300
         );
+
         this.addElement(labelStart);
         this.addElement(labelModify);
     }
@@ -38,12 +39,13 @@ class SceneTitle extends Scene {
         });
 
         this.registerAction("Enter", () => {
-            if (this.arrow.choice == "start") {
+            log("this.arrow", this.arrow.choice);
+            if (this.arrow.choice === "start") {
                 const s = new SceneStart(this.game);
                 this.game.replaceScene(s);
             }
             // TODO Modify Part
-            else if (this.arrow.choice == "modify") {
+            else if (this.arrow.choice === "modify") {
                 const s = new SceneModify(this.game, 1);
                 this.game.replaceScene(s);
             }

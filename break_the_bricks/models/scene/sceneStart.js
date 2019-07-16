@@ -102,29 +102,6 @@ class SceneStart extends Scene {
         });
     }
 
-    addBlocks(arr) {
-        for (let element of arr) {
-            element.scene = this;
-            if (element.alive) {
-                this.elements.push(element);
-            }
-        }
-    }
-
-    loadLevel(n) {
-        n = n - 1;
-        var level = levels[n];
-        if (!level) {
-            return [];
-        }
-        return level.map(block => {
-            var x = block[0];
-            var y = block[1];
-            var lives = block[2] || 1;
-            return new Block(this.game, x, y, lives);
-        });
-    }
-
     mouseDragItem() {
         // distanceX: distanceX(dragPointX, itemPointX)
         let enableDrag = false,
