@@ -1,7 +1,8 @@
 import { log } from "../../utils.js";
-import { Scene } from "./index.js";
-import { ImageMain } from "../image_model/index.js";
+import { Scene, SceneEnd } from "./index.js";
+import { ImageMain, Label } from "../image_model/index.js";
 import { Player, Enemy } from "../image_model/index.js";
+import config from "../config.js";
 
 class SceneStart extends Scene {
     constructor(game) {
@@ -19,11 +20,20 @@ class SceneStart extends Scene {
         this.player = new Player(this.game);
         this.player.x = 200;
         this.player.y = 650;
+        this.score = 0;
 
         this.addElement(this.bg);
         this.addElement(this.player);
-        //
+
         this.addEnemies();
+        let labelScore = new Label(
+            this.game,
+            `Score: ${this.score}`,
+            "score",
+            15,
+            820
+        );
+        this.addElement(labelScore);
     }
 
     setupInputs() {
@@ -34,10 +44,10 @@ class SceneStart extends Scene {
             this.player.moveRight();
         });
         this.registerAction("s", () => {
-            this.player.moveUp();
+            this.player.moveDown();
         });
         this.registerAction("w", () => {
-            this.player.moveDown();
+            this.player.moveUp();
         });
         this.registerAction("j", () => {
             this.player.fire();
@@ -55,13 +65,23 @@ class SceneStart extends Scene {
     update() {
         super.update();
 
+        // bullet crash the enemy
         for (let enemy of this.enemies) {
             for (let bullet of this.bullets) {
                 if (enemy.collide(bullet)) {
                     enemy.kill();
+                    this.score += Number(config.score[enemy.type]);
                     bullet.kill();
                     enemy.boom();
                 }
+            }
+        }
+
+        // gameover parts
+        for (let enemy of this.enemies) {
+            if (enemy.collide(this.player)) {
+                const s = new SceneEnd(this.game);
+                this.game.replaceScene(s);
             }
         }
     }

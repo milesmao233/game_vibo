@@ -11,10 +11,10 @@ class SceneTitle extends Scene {
 
     setup() {
         this.arrow = new Arrow(this.game);
-        this.arrow.x = 200;
+        this.arrow.x = 150;
         this.arrow.y = 230;
-        const labelStart = new Label(this.game, "开始游戏", 230, 250);
-        const labelAbout = new Label(this.game, "帮助说明", 230, 300);
+        const labelStart = new Label(this.game, "开始游戏", "start", 180, 250);
+        const labelAbout = new Label(this.game, "帮助说明", "about", 180, 300);
         this.addElement(this.arrow);
         this.addElement(labelStart);
         this.addElement(labelAbout);
