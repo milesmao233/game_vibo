@@ -3,6 +3,7 @@ import { log } from "../../utils.js";
 class Dinosaur {
     constructor(game) {
         this.game = game;
+        this.context = this.game.context;
         this.setup();
     }
 
@@ -24,16 +25,33 @@ class Dinosaur {
         this.h = this.texture.height / 3;
         this.frameIndex = 0;
         this.frameCount = 2;
+        this.flipX = false;
     }
 
     draw() {
-        this.game.context.drawImage(
-            this.texture,
-            this.x,
-            this.y,
-            this.w,
-            this.h
-        );
+        if (this.flipX) {
+            this.context.save();
+            let middle = this.x + this.w / 4;
+            this.context.translate(middle, 0);
+            this.context.scale(-1, 1);
+            this.context.translate(-middle, 0);
+            this.context.drawImage(
+                this.texture,
+                this.x,
+                this.y,
+                this.w,
+                this.h
+            );
+            this.context.restore();
+        } else {
+            this.context.drawImage(
+                this.texture,
+                this.x,
+                this.y,
+                this.w,
+                this.h
+            );
+        }
     }
 
     update() {
@@ -62,6 +80,7 @@ class Dinosaur {
     }
 
     move(num, eventStatus) {
+        this.flipX = num < 0;
         if (eventStatus == "keydown") {
             this.changeAnimation("run");
             this.x = this.x + num;
