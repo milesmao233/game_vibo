@@ -9,7 +9,7 @@ class SceneTitle extends Scene {
     setup() {
         this.bg = new ImageMain(this.game, "bg", 480, 750);
         this.addElement(this.bg);
-        this.title = new ImageMain(this.game, "title");
+        this.title = new ImageMain(this.game, "title", null, null, 160);
         this.addElement(this.title);
         this.ready = new ImageMain(this.game, "ready", null, null, 150, 250);
         this.addElement(this.ready);

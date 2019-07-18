@@ -22,8 +22,6 @@ class Pipes {
             this.pipeForY(p1, p2);
             this.pipes.push(p1, p2);
         }
-
-        log("this.pipes", this.pipes);
     }
     pipeForY(p1, p2) {
         p1.y = randomBetween(-config.pipe_Up, 0);

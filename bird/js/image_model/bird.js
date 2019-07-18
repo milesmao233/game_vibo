@@ -1,5 +1,5 @@
 import config from "../config.js";
-import { rectIntersects } from "../../utils.js";
+import { log, rectIntersects } from "../../utils.js";
 
 class Bird {
     constructor(game, x, y) {
@@ -65,6 +65,20 @@ class Bird {
 
     collide(item) {
         return rectIntersects(this, item) || rectIntersects(item, this);
+    }
+
+    pass(pipe) {
+        let collideItem = {
+            x: pipe.x + pipe.w,
+            y: pipe.y - config.pipe_Y,
+            w: 1,
+            h: config.pipe_Y
+        };
+
+        return (
+            rectIntersects(this, collideItem) ||
+            rectIntersects(collideItem, this)
+        );
     }
 
     moveLeft() {

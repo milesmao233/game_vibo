@@ -1,17 +1,18 @@
 import { ImageMain, Label } from "../image_model/index.js";
 import { SceneStart, Scene } from "../scene/index.js";
 
-class SceneTitle extends Scene {
-    constructor(game, type) {
+class SceneEnd extends Scene {
+    constructor(game, score) {
         super(game);
+        this.score = score;
         this.setup();
     }
     setup() {
         this.bg = new ImageMain(this.game, "bg", 480, 750);
         this.addElement(this.bg);
-        this.title = new ImageMain(this.game, "title");
+        this.title = new ImageMain(this.game, "title", null, null, 160);
         this.addElement(this.title);
-        this.end = new ImageMain(this.game, "end", null, null, 150, 250);
+        this.end = new ImageMain(this.game, "end", null, null, 150, 200);
         this.addElement(this.end);
 
         this.playButton = new ImageMain(
@@ -20,7 +21,7 @@ class SceneTitle extends Scene {
             null,
             null,
             190,
-            350
+            300
         );
         this.addElement(this.playButton);
 
@@ -29,9 +30,18 @@ class SceneTitle extends Scene {
             "按K重新开始游戏",
             "start",
             170,
-            450
+            400
         );
         this.addElement(this.labelStart);
+
+        this.labelScore = new Label(
+            this.game,
+            `Score: ${this.score}`,
+            "score",
+            200,
+            450
+        );
+        this.addElement(this.labelScore);
 
         // if (this.type == 1) {
 
@@ -46,4 +56,4 @@ class SceneTitle extends Scene {
     }
 }
 
-export default SceneTitle;
+export default SceneEnd;
