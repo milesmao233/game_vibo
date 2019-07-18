@@ -1,3 +1,5 @@
+import config from "./js/config.js";
+
 const e = sel => document.querySelector(sel);
 const es = sel => document.querySelectorAll(sel);
 
@@ -27,8 +29,9 @@ const rectIntersects = function(a, b) {
         bMiddleY = b.y + b.h / 2;
 
     return (
-        Math.abs(bMiddleX - aMiddleX) <= a.w / 2 + b.w / 2 &&
-        Math.abs(bMiddleY - aMiddleY) <= a.h / 2 + b.h / 2
+        Math.abs(bMiddleX - aMiddleX) <=
+            a.w / 2 + b.w / 2 - config.crash_error &&
+        Math.abs(bMiddleY - aMiddleY) <= a.h / 2 + b.h / 2 - config.crash_error
     );
 };
 

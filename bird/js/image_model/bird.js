@@ -1,4 +1,6 @@
 import config from "../config.js";
+import { rectIntersects } from "../../utils.js";
+
 class Bird {
     constructor(game, x, y) {
         this.game = game;
@@ -43,7 +45,7 @@ class Bird {
     }
 
     update() {
-        if (this.y < 620 || this.vy < 0) {
+        if (this.y < 670 || this.vy < 0) {
             this.y += this.vy;
             this.vy += this.vg * 0.03;
         }
@@ -59,6 +61,10 @@ class Bird {
             }
             this.frequency = 2;
         }
+    }
+
+    collide(item) {
+        return rectIntersects(this, item) || rectIntersects(item, this);
     }
 
     moveLeft() {

@@ -11,8 +11,8 @@ class SceneTitle extends Scene {
         this.addElement(this.bg);
         this.title = new ImageMain(this.game, "title");
         this.addElement(this.title);
-        this.ready = new ImageMain(this.game, "ready", null, null, 150, 250);
-        this.addElement(this.ready);
+        this.end = new ImageMain(this.game, "end", null, null, 150, 250);
+        this.addElement(this.end);
 
         this.playButton = new ImageMain(
             this.game,
@@ -26,9 +26,9 @@ class SceneTitle extends Scene {
 
         this.labelStart = new Label(
             this.game,
-            "按K开始游戏",
+            "按K重新开始游戏",
             "start",
-            190,
+            170,
             450
         );
         this.addElement(this.labelStart);

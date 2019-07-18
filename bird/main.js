@@ -11,7 +11,8 @@ const __main = () => {
         land: "./img/land.png",
         title: "./img/title.png",
         ready: "./img/text_ready.png",
-        end: "./img/text_game_over.png"
+        end: "./img/text_game_over.png",
+        button_play: "./img/button_play.png"
     };
     const game = new Game(images);
 

@@ -17,17 +17,17 @@ class Ground {
     }
 
     setup() {
-        this.grounds = [];
+        this.lands = [];
         this.skipCount = 49;
         for (let i = 0; i < 4; i++) {
             let land = new Land(this.game, 240, 80, this);
             land.x = i * 240;
-            this.grounds.push(land);
+            this.lands.push(land);
         }
     }
 
     draw() {
-        for (let l of this.grounds) {
+        for (let l of this.lands) {
             this.scene.drawImage(l);
         }
     }
@@ -41,7 +41,7 @@ class Ground {
             offset = 240;
         }
         for (let i = 0; i < 4; i++) {
-            let lands = this.grounds;
+            let lands = this.lands;
             let g = lands[i];
             g.x += offset;
         }

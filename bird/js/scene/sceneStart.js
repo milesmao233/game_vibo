@@ -1,10 +1,11 @@
 import { ImageMain, Bird, Ground, Pipes } from "../image_model/index.js";
-import Scene from "./sceneMain.js";
+import { Scene, SceneEnd } from "./index.js";
 import { log } from "../../utils.js";
 
 class SceneStart extends Scene {
     constructor(game) {
         super(game);
+        this.score = 0;
         this.setup();
     }
     setup() {
@@ -13,8 +14,8 @@ class SceneStart extends Scene {
         this.player = new Bird(this.game);
         this.addElement(this.player);
 
-        this.grounds = new Ground(this.game);
-        this.addElement(this.grounds);
+        this.ground = new Ground(this.game);
+        this.addElement(this.ground);
 
         this.pipes = new Pipes(this.game);
         this.addElement(this.pipes);
@@ -28,14 +29,22 @@ class SceneStart extends Scene {
         this.registerAction("j", () => {
             this.player.jump();
         });
-        this.registerAction("p", () => {
-            if (this.wait) return;
-            this.wait = true;
-            this.play = !this.play;
-            setTimeout(() => {
-                this.wait = false;
-            }, 300);
-        });
+    }
+
+    update() {
+        super.update();
+
+        this.birdCrash(this.pipes.pipes);
+        this.birdCrash(this.ground.lands);
+    }
+
+    birdCrash(items) {
+        for (let item of items) {
+            if (this.player.collide(item)) {
+                const s = new SceneEnd(this.game);
+                this.game.replaceScene(s);
+            }
+        }
     }
 }
 
