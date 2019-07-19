@@ -20,17 +20,23 @@ class SceneStart extends Scene {
         this.pipes = new Pipes(this.game);
         this.addElement(this.pipes);
 
-        // this.registerAction("a", () => {
-        //     this.player.moveLeft();
-        // });
-        // this.registerAction("d", () => {
-        //     this.player.moveRight();
-        // });
+        this.registerAction("a", () => {
+            this.player.moveLeft();
+        });
+        this.registerAction("d", () => {
+            this.player.moveRight();
+        });
         this.registerAction("j", () => {
             this.player.jump();
         });
 
-        this.labelAbout = new Label(this.game, "按J控制鸟", "about", 0, 20);
+        this.labelAbout = new Label(
+            this.game,
+            "按J控制鸟跳跃, 按A鸟左移， 按D鸟右移",
+            "about",
+            0,
+            20
+        );
 
         this.addElement(this.labelAbout);
 

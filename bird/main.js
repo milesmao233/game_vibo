@@ -3,7 +3,7 @@ import { SceneTitle } from "./js/scene/index.js";
 
 const __main = () => {
     let images = {
-        bg: "./img/bg_night.png",
+        bg: "./img/bg_day.png",
         bird0: "./img/bird0_0.png",
         bird1: "./img/bird0_1.png",
         bird2: "./img/bird0_2.png",
