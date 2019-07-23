@@ -1,21 +1,23 @@
 class Game {
     constructor() {
+        this.setup();
+    }
+
+    setup() {
         this.color = 1;
         this.board = [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 1, 2, 0, 0, 0],
+            [0, 0, 0, 2, 1, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
         ];
-        this.setup();
-    }
-
-    setup() {
+        this.canDropDisc = false;
         this.addFrame();
+        this.render();
     }
 
     run() {
@@ -41,6 +43,8 @@ class Game {
         for (let block of blocks) {
             bindEvent(block, "click", () => {
                 let [oy, ox] = block.dataset.offset.split("");
+                oy = parseInt(oy);
+                ox = parseInt(ox);
                 this.update(oy, ox);
                 this.render();
             });
@@ -49,45 +53,83 @@ class Game {
 
     update(y, x) {
         if (this.board[y][x] !== 0) {
+            log("有棋子占据该位置");
             return;
         } else {
+            // 吃子, 改变board数据
+            this.discCombine(y, x);
+            // 判断落子规则
+            if (!this.canDropDisc) {
+                log("这个位置落子不符合规则");
+                return;
+            }
+            // 落子，改变Board数据
             this.board[y][x] = this.color;
+            // 落子初始化
+            this.canDropDisc = false;
+            // 改变下一颗棋子颜色
+            this.color = 3 - this.color;
         }
-
-        // 吃子
-        // 左横向吃子
-        this.leftRowCombine(y, x);
-        // 右横向吃子
-        this.rightRowCombine(y, x);
-
-        this.color = 3 - this.color;
     }
 
-    leftRowCombine(y, x) {
-        let hasOpposite = false;
-        let canMove = false;
-        let ox = x;
-        x -= 1;
-        while (x >= 0) {
-            if (this.board[y][x] === 3 - this.color) {
-                hasOpposite = true;
-            }
-            // 与落子的颜色相同， 前面又有不同的开始吃子
-            if (this.board[y][x] === this.color) {
-                if (hasOpposite) canMove = true;
-                break;
-            }
-            // 碰到没有黑白的跳出
-            if (this.board[y][x] === 0) {
-                break;
-            }
-            x -= 1;
-        }
+    discCombine(y, x) {
+        let directions = [
+                [-1, -1],
+                [-1, 0],
+                [-1, 1],
+                [0, 1],
+                [0, -1],
+                [1, -1],
+                [1, 0],
+                [1, 1]
+            ],
+            ox = x,
+            oy = y;
 
-        if (canMove) {
-            while (x != ox) {
-                this.board[y][x] = this.color;
-                x++;
+        for (let direction of directions) {
+            let moveX = direction[0],
+                moveY = direction[1],
+                hasOpposite = false,
+                canChange = false;
+
+            while (true) {
+                // 每个direction 初始化点击的x, y
+                if (!hasOpposite) {
+                    x = ox;
+                    y = oy;
+                }
+                x += moveX;
+                y += moveY;
+
+                if (x < 0 || x >= 8 || y < 0 || y >= 8) {
+                    break;
+                }
+
+                if (this.board[y][x] === 3 - this.color) {
+                    hasOpposite = true;
+                }
+                // 与落子的颜色相同， 前面又有不同的开始吃子
+                if (this.board[y][x] === this.color) {
+                    if (hasOpposite) {
+                        canChange = true;
+                        // 可以落子
+                        this.canDropDisc = true;
+                    }
+                    break;
+                }
+                // 碰到没有黑白的跳出
+                if (this.board[y][x] === 0) {
+                    break;
+                }
+            }
+
+            if (canChange) {
+                while (true) {
+                    x -= moveX;
+                    y -= moveY;
+                    if (x == ox && y === oy) break;
+                    this.board[y][x] = this.color;
+                }
             }
         }
     }
