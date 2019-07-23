@@ -4,7 +4,7 @@ class Game {
     }
 
     setup() {
-        this.color = 1;
+        this.color = 2;
         this.board = [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,6 +16,7 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0]
         ];
         this.canDropDisc = false;
+        this.canDropDiscCheck = false;
         this.setFrame();
         this.render();
     }
@@ -75,6 +76,13 @@ class Game {
                 ox = parseInt(ox);
                 this.updateBoard(oy, ox);
                 this.render();
+
+                if (!this.checkBoard()) {
+                    this.color = 3 - this.color;
+                    if (!this.checkBoard()) {
+                        console.log("Game Over");
+                    }
+                }
             });
         }
     }
@@ -93,6 +101,7 @@ class Game {
             }
             // 落子，改变Board数据
             this.board[y][x] = this.color;
+
             // 落子初始化
             this.canDropDisc = false;
             // 改变下一颗棋子颜色
@@ -100,7 +109,19 @@ class Game {
         }
     }
 
-    discCombine(y, x) {
+    checkBoard() {
+        this.canDropDiscCheck = false;
+        for (let y = 0; y < 8; y++) {
+            for (let x = 0; x < 8; x++) {
+                if (this.board[y][x] == 0) {
+                    this.discCombine(x, y, true);
+                }
+            }
+        }
+        return this.canDropDiscCheck;
+    }
+
+    discCombine(y, x, checkBoard = false) {
         let directions = [
                 [-1, -1],
                 [-1, 0],
@@ -118,7 +139,7 @@ class Game {
             let moveX = direction[0],
                 moveY = direction[1],
                 hasOpposite = false,
-                canChange = false;
+                directionCanChange = false;
 
             while (true) {
                 // 每个direction 初始化点击的x, y
@@ -132,16 +153,18 @@ class Game {
                 if (x < 0 || x >= 8 || y < 0 || y >= 8) {
                     break;
                 }
-
                 if (this.board[y][x] === 3 - this.color) {
                     hasOpposite = true;
                 }
                 // 与落子的颜色相同， 前面又有不同的开始吃子
                 if (this.board[y][x] === this.color) {
                     if (hasOpposite) {
-                        canChange = true;
-                        // 可以落子
-                        this.canDropDisc = true;
+                        directionCanChange = true;
+                        if (checkBoard) {
+                            this.canDropDiscCheck = true;
+                        } else {
+                            this.canDropDisc = true;
+                        }
                     }
                     break;
                 }
@@ -151,7 +174,8 @@ class Game {
                 }
             }
 
-            if (canChange) {
+            // 是checkboard的时候，不改变board数据
+            if (directionCanChange && !checkBoard && this.canDropDisc) {
                 while (true) {
                     x -= moveX;
                     y -= moveY;
