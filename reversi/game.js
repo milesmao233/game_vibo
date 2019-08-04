@@ -6,14 +6,14 @@ class Game {
     setup() {
         this.color = 2;
         this.board = [
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 1, 2, 0, 0, 0],
-            [0, 0, 0, 2, 1, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0]
+            [1, 1, 1, 2, 1, 1, 0, 0],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 2],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1]
         ];
         this.canDropDisc = false;
         this.canDropDiscCheck = false;
@@ -40,10 +40,10 @@ class Game {
             for (let x = 0; x < 8; x++) {
                 if (this.board[y][x] != 0) {
                     if (this.board[y][x] == 1) {
-                        disc = this.addDisc("white");
+                        disc = this._addDisc("white");
                     }
                     if (this.board[y][x] == 2) {
-                        disc = this.addDisc("black");
+                        disc = this._addDisc("black");
                     }
                     let element = e(`.block[data-offset= '${y}${x}']`);
                     if (!element.firstChild) {
@@ -56,13 +56,17 @@ class Game {
         }
     }
 
-    addDisc(color) {
+    _addDisc(color) {
         let disc = document.createElement("section");
         disc.setAttribute("class", `disc disc-${color}`);
         return disc;
     }
 
     run() {
+        // log("this.board3", this.board);
+        // let ai = new AI(this.board);
+        // ai.computeAI();
+
         this.bindClickEvents();
     }
 
@@ -72,17 +76,20 @@ class Game {
         for (let block of blocks) {
             bindEvent(block, "click", () => {
                 let [oy, ox] = block.dataset.offset.split("");
-                oy = parseInt(oy);
-                ox = parseInt(ox);
+                oy = Number(oy);
+                ox = Number(ox);
                 this.updateBoard(oy, ox);
                 this.render();
 
-                if (!this.checkBoard()) {
-                    this.color = 3 - this.color;
-                    if (!this.checkBoard()) {
-                        console.log("Game Over");
-                    }
-                }
+                // check pass 是否有地方下子， 没有地方就pass
+                this.checkPass();
+
+                // 删除这个点击处的AI信息，重新计算下一个颜色的AI
+                // delete this.AIData[[ox, oy]];
+                // this.computeAI();
+
+                // let dataNow = this._computeWhiteAndBlockNumber(this.board);
+                // log("点击后目前的数据", dataNow);
             });
         }
     }
@@ -109,12 +116,22 @@ class Game {
         }
     }
 
+    checkPass() {
+        if (!this.checkBoard()) {
+            this.color = 3 - this.color;
+            if (!this.checkBoard()) {
+                console.log("Game Over");
+            }
+        }
+    }
+
+    // 检查是否有地方落子
     checkBoard() {
         this.canDropDiscCheck = false;
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 8; x++) {
                 if (this.board[y][x] == 0) {
-                    this.discCombine(x, y, true);
+                    this.discCombine(y, x, true);
                 }
             }
         }
@@ -150,19 +167,24 @@ class Game {
                 x += moveX;
                 y += moveY;
 
+                // 检查边界
                 if (x < 0 || x >= 8 || y < 0 || y >= 8) {
                     break;
                 }
                 if (this.board[y][x] === 3 - this.color) {
                     hasOpposite = true;
                 }
-                // 与落子的颜色相同， 前面又有不同的开始吃子
+                // 与落子的颜色相同， 前面又有不同的 可以落子
                 if (this.board[y][x] === this.color) {
                     if (hasOpposite) {
                         directionCanChange = true;
+                        // 只是检查棋盘
                         if (checkBoard) {
                             this.canDropDiscCheck = true;
-                        } else {
+                        }
+
+                        // 可以落子改变Board
+                        else {
                             this.canDropDisc = true;
                         }
                     }
@@ -174,7 +196,7 @@ class Game {
                 }
             }
 
-            // 是checkboard的时候，不改变board数据
+            // 不是checkboard、 不是检查AI的时候，改变board数据
             if (directionCanChange && !checkBoard && this.canDropDisc) {
                 while (true) {
                     x -= moveX;
