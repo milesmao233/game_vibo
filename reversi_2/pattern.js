@@ -1,6 +1,6 @@
 class Pattern {
-    constructor() {
-        this.board = [
+    constructor(board, color) {
+        this.board = board || [
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
@@ -10,7 +10,7 @@ class Pattern {
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0]
         ];
-        this.color = 1;
+        this.color = color || 2;
     }
 
     // 检查是否有地方落子
@@ -94,5 +94,9 @@ class Pattern {
                 }
             }
         }
+    }
+
+    clone() {
+        return new Pattern(this.board.map(line => line.slice()), this.color);
     }
 }

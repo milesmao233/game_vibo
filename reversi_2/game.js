@@ -1,6 +1,10 @@
 class Game {
     constructor() {
-        this.pattern = new Pattern();
+        this.patterns = [new Pattern()];
+    }
+
+    get pattern() {
+        return this.patterns[this.patterns.length - 1];
     }
 
     bindEventClickEvent(view) {
@@ -22,15 +26,14 @@ class Game {
 
         // 悔棋部分
         let regret = e(".regret");
-        regret.addEventListener("click", event => {
-            log("regret");
-            // this.revert();
-            // view.render();
+        bindEvent(regret, "click", () => {
+            this.revert();
+            view.render();
         });
     }
 
     move(y, x) {
-        let pattern = this.pattern;
+        let pattern = this.pattern.clone();
         if (pattern.board[y][x] !== 0) {
             log("有棋子占据该位置");
             return;
@@ -48,6 +51,8 @@ class Game {
                 pattern.canDropDisc = false;
                 // change next click color
                 pattern.color = 3 - pattern.color;
+
+                this.patterns.push(pattern);
             }
         }
     }
@@ -62,10 +67,9 @@ class Game {
         }
     }
 
-    // revert() {
-    //     if (this.patterns.length > 1) {
-    //         this.patterns.pop();
-    //         this.colors.pop();
-    //     }
-    // }
+    revert() {
+        if (this.patterns.length > 1) {
+            this.patterns.pop();
+        }
+    }
 }

@@ -8,7 +8,7 @@ class View {
     setFrame() {
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 8; x++) {
-                let element = document.createElement("section");
+                let element = document.createElement("div");
                 element.setAttribute("class", "block");
                 element.setAttribute("data-offset", `${y}${x}`);
                 this.container.appendChild(element);
@@ -30,18 +30,21 @@ class View {
         let board = this.game.pattern.board;
         for (let y = 0; y < 8; y++) {
             for (let x = 0; x < 8; x++) {
+                let element = e(`.block[data-offset= '${y}${x}']`);
                 if (board[y][x] != 0) {
                     if (board[y][x] == 1) {
                         disc = this._addDisc("white");
-                    }
-                    if (board[y][x] == 2) {
+                    } else if (board[y][x] == 2) {
                         disc = this._addDisc("black");
                     }
-                    let element = e(`.block[data-offset= '${y}${x}']`);
                     if (!element.firstChild) {
                         element.appendChild(disc);
                     } else {
                         element.replaceChild(disc, element.firstChild);
+                    }
+                } else {
+                    if (element.firstChild) {
+                        element.removeChild(element.firstChild);
                     }
                 }
             }
@@ -49,7 +52,7 @@ class View {
     }
 
     _addDisc(color) {
-        let disc = document.createElement("section");
+        let disc = document.createElement("div");
         disc.setAttribute("class", `disc disc-${color}`);
         return disc;
     }
