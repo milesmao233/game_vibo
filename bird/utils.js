@@ -40,13 +40,4 @@ const randomBetween = (start, end) => {
     return Math.floor(n);
 };
 
-export {
-    e,
-    es,
-    bind,
-    bindAll,
-    log,
-    imageFromPath,
-    rectIntersects,
-    randomBetween
-};
+export { e, es, bindAll, log, imageFromPath, rectIntersects, randomBetween };
