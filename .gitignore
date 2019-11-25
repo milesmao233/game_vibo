@@ -39,3 +39,5 @@ jspm_packages
 
 .prettierrc
 test.js
+
+.idea
